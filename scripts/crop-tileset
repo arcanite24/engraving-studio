@@ -1,0 +1,1 @@
+convert $1 -crop 32x32 ../public/tiles/tile%03d.png

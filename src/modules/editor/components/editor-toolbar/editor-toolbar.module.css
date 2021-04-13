@@ -1,0 +1,8 @@
+.editor-toolbar {
+  /* height: 100%; */
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0.5rem;
+}
