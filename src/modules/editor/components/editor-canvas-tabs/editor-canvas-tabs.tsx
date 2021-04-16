@@ -9,10 +9,11 @@ import styles from './editor-canvas-tabs.module.css';
 const DEFAULT_TAB = 'default';
 
 interface Props {
+  images: Record<string, HTMLImageElement>;
   onActiveTabChanged?: (lastCanvas: CanvasModel) => void;
 }
 
-export const EditorCanvasTabs = ({ onActiveTabChanged }: Props) => {
+export const EditorCanvasTabs = ({ onActiveTabChanged, images }: Props) => {
   const [activeTab, setActiveTab] = useState<string>(DEFAULT_TAB);
 
   const tabs = useSelector(tabsSelector);
@@ -56,7 +57,7 @@ export const EditorCanvasTabs = ({ onActiveTabChanged }: Props) => {
           key={tab.id}
           panel={
             <>
-              <EditorCanvas canvas={tab}></EditorCanvas>
+              <EditorCanvas canvas={tab} images={images}></EditorCanvas>
             </>
           }
         />

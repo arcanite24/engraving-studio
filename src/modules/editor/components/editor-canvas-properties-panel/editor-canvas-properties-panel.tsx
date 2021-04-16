@@ -4,12 +4,10 @@ import {
   InputGroup,
   Menu,
   MenuDivider,
-  MenuItem,
 } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../../app.store';
 import type { CanvasModel } from '../../../canvas/canvas.model';
-import { updateCanvas } from '../../editor.slice';
 
 interface Props {
   canvas: CanvasModel;
@@ -25,7 +23,8 @@ export const EditorCanvasPropertiesPanel = ({ canvas }: Props) => {
   }, [canvas]);
 
   const updateCanvasProperties = (newCanvas: CanvasModel) => {
-    dispatch(updateCanvas(newCanvas));
+    // dispatch(updateCanvas(newCanvas));
+    alert('For now updating the canvas is disabled 😢. Too complex for an MVP');
   };
 
   return (
