@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './editor-canvas.module.css';
 import type { CanvasModel } from '../../../canvas/canvas.model';
 import type { CellModel } from '../../../canvas/cell.model';
@@ -15,6 +15,9 @@ import { EditorTools } from '../../editor-tools';
 import { useKeyPress } from '../../hooks/useKeyPress';
 import { Stage, Layer } from 'react-konva';
 import { CanvasFastCell } from '../../../canvas/components/canvas-fast-cell/canvas-fast-cell';
+import { Button } from '@blueprintjs/core';
+import type { Stage as StageType } from 'konva/types/Stage';
+import { FileService } from '../../../file/file.service';
 
 interface Props {
   canvas: CanvasModel;
@@ -60,6 +63,10 @@ export const EditorCanvas = ({ canvas, images }: Props) => {
   const activeTool = useSelector(activeToolSelector);
   const activePaletteTile = useSelector(activePaletteTileSelector);
   const activeCell = useSelector(activeCellSelector);
+
+  const stageRef = useRef<StageType>(null);
+
+  const [showGrid, setShowGrid] = useState<boolean>(true);
 
   const isRPressed = useKeyPress('r');
 
@@ -133,13 +140,32 @@ export const EditorCanvas = ({ canvas, images }: Props) => {
     return images[id];
   };
 
+  const exportToPNG = () => {
+    if (stageRef) {
+      setShowGrid(false);
+
+      setTimeout(() => {
+        const uri = stageRef.current?.toDataURL();
+        FileService.downloadURI(uri ?? '', `${canvas.name}.png`);
+
+        setTimeout(() => {
+          setShowGrid(true);
+        }, 200);
+      }, 200);
+    }
+  };
+
   useEffect(() => {
     console.log(images);
   }, [images]);
 
   return (
     <div className={styles['editor-canvas']}>
-      <Stage width={1500} height={1500}>
+      <div className="mb-2" style={{ marginBottom: '1rem' }}>
+        <Button onClick={() => exportToPNG()}>Export as PNG</Button>
+      </div>
+
+      <Stage width={1500} height={1500} ref={stageRef}>
         <Layer>
           {Object.values(cellsLocalState).map((cell, i) => {
             return (
@@ -159,6 +185,7 @@ export const EditorCanvas = ({ canvas, images }: Props) => {
                 x={cell.x}
                 y={cell.y}
                 image={getCellImage(cell.img ?? '')}
+                showGrid={showGrid}
               ></CanvasFastCell>
             );
           })}

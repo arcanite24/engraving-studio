@@ -11,6 +11,7 @@ interface Props {
   className?: string;
   style?: React.CSSProperties;
   selected?: boolean;
+  showGrid?: boolean;
 
   image: HTMLImageElement | null;
 
@@ -28,19 +29,22 @@ export const CanvasFastCell = ({
   onClick,
   cell,
   image,
+  showGrid = true,
 }: Props) => {
   return (
     <Group onClick={() => onClick()}>
-      <Rect
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        fill="white"
-        stroke={selected ? 'red' : '#eee'}
-        strokeWidth={1}
-        // strokeEnabled={selected}
-      ></Rect>
+      {showGrid && (
+        <Rect
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          fill="white"
+          stroke={selected ? 'red' : '#eee'}
+          strokeWidth={1}
+          strokeEnabled={showGrid}
+        ></Rect>
+      )}
 
       {image && (
         <Image
