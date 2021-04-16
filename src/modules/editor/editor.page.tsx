@@ -1,20 +1,29 @@
 import Grid from '@react-css/grid';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import type { CanvasModel } from '../canvas/canvas.model';
 import { EditorCanvasPropertiesPanel } from './components/editor-canvas-properties-panel/editor-canvas-properties-panel';
 import { EditorCanvasTabs } from './components/editor-canvas-tabs/editor-canvas-tabs';
 import { EditorNavbar } from './components/editor-navbar/editor-navbar';
 import { EditorPalletePanel } from './components/editor-pallete-panel/editor-pallete-panel';
 import { EditorToolbar } from './components/editor-toolbar/editor-toolbar';
+import { TilesDefinition } from './editor-tiles';
 
 import './editor.page.css';
-import { tabsSelector } from './editor.slice';
+import { EditorService } from './editor.service';
+import useImage from './hooks/useImage';
 
 interface Props {}
 
+const imagesToLoad = Object.values(TilesDefinition).map((tile) => ({
+  id: tile.id,
+  url: EditorService.getTilePath(tile),
+}));
+
 export const EditorPage = (props: Props) => {
   const [activeCanvas, setActiveCanvas] = useState<CanvasModel | null>(null);
+
+  // Load images
+  const images = useImage(imagesToLoad);
 
   return (
     <div style={{ display: 'flex', width: '100%', flexDirection: 'column' }}>
@@ -26,6 +35,7 @@ export const EditorPage = (props: Props) => {
             onActiveTabChanged={(lastCanvas) => {
               setActiveCanvas(lastCanvas);
             }}
+            images={images}
           ></EditorCanvasTabs>
 
           <div className="u-flex u-flexRow" style={{ gap: '4px' }}>
