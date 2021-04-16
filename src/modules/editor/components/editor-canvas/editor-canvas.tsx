@@ -32,12 +32,12 @@ const computeCanvas = (canvas: CanvasModel, oldState: CellState): CellState => {
 
   for (
     let x = 0;
-    x <= canvas.gridWidth * canvas.tileWidth + padding * canvas.gridWidth;
+    x < canvas.gridWidth * canvas.tileWidth + padding * canvas.gridWidth;
     x += canvas.tileWidth + padding
   ) {
     for (
       let y = 0;
-      y <= canvas.gridHeight * canvas.tileHeight + padding * canvas.gridHeight;
+      y < canvas.gridHeight * canvas.tileHeight + padding * canvas.gridHeight;
       y += canvas.tileHeight + padding
     ) {
       const id = uuid.v5(
@@ -155,17 +155,42 @@ export const EditorCanvas = ({ canvas, images }: Props) => {
     }
   };
 
+  const exportToJSON = () => {
+    const prefix = 'data:application/json;base64,';
+    const payload = btoa(JSON.stringify(cellsLocalState));
+    FileService.downloadURI(`${prefix}${payload}`, `${canvas.name}.egc`);
+  };
+
   useEffect(() => {
     console.log(images);
   }, [images]);
 
   return (
     <div className={styles['editor-canvas']}>
-      <div className="mb-2" style={{ marginBottom: '1rem' }}>
+      <div
+        className="mb-2"
+        style={{
+          marginBottom: '1rem',
+          gap: '4px',
+          display: 'flex',
+          flexDirection: 'row',
+        }}
+      >
         <Button onClick={() => exportToPNG()}>Export as PNG</Button>
+        <Button onClick={() => exportToJSON()}>Save project</Button>
       </div>
 
-      <Stage width={1500} height={1500} ref={stageRef}>
+      <Stage
+        width={
+          canvas.gridWidth * canvas.tileWidth +
+          canvas.gridWidth * canvas.gridGap
+        }
+        height={
+          canvas.gridHeight * canvas.tileHeight +
+          canvas.gridHeight * canvas.gridGap
+        }
+        ref={stageRef}
+      >
         <Layer>
           {Object.values(cellsLocalState).map((cell, i) => {
             return (

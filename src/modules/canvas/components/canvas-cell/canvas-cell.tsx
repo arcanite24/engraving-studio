@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './canvas-cell.module.css';
 import classnames from 'classnames';
 import type { CellModel } from '../../cell.model';

@@ -1,6 +1,6 @@
 import React from 'react';
 import type { CellModel } from '../../cell.model';
-import { Rect, Group, Text, Image } from 'react-konva';
+import { Rect, Group, Image } from 'react-konva';
 
 interface Props {
   cell: CellModel;
@@ -31,6 +31,9 @@ export const CanvasFastCell = ({
   image,
   showGrid = true,
 }: Props) => {
+  const xOffset = width / 2;
+  const yOffset = height / 2;
+
   return (
     <Group onClick={() => onClick()}>
       {showGrid && (
@@ -48,12 +51,14 @@ export const CanvasFastCell = ({
 
       {image && (
         <Image
-          x={x}
-          y={y}
+          x={x + xOffset}
+          y={y + yOffset}
           image={image}
           width={width}
           height={height}
           rotation={cell.rotation}
+          offsetX={xOffset}
+          offsetY={yOffset}
         ></Image>
       )}
     </Group>

@@ -1,5 +1,5 @@
 import { Button, IconName } from '@blueprintjs/core';
-import { Classes, Popover2, Tooltip2 } from '@blueprintjs/popover2';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import React from 'react';
 import { useAppDispatch } from '../../../../app.store';
 import type { EditorTools } from '../../editor-tools';
